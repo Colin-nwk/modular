@@ -10,7 +10,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class PostRating extends Model
 {
     use HasFactory;
-    protected $fillable = ['rating'];
+    // protected $fillable = ['rating'];
+    protected $fillable = ['user_id', 'post_id', 'rating'];
 
     public function user()
     {

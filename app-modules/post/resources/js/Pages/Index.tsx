@@ -140,6 +140,7 @@ import {
   PaginationItem,
   PaginationLink as ShadcnPaginationLink,
 } from '@/components/ui/pagination';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Star, X } from 'lucide-react';
 
 // Debounce utility function
@@ -201,103 +202,108 @@ export default function PostIndex() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <Head title="Posts" />
+    <AuthenticatedLayout>
+      <div className="container mx-auto px-4 py-8">
+        <Head title="Posts" />
 
-      <div className="relative mb-8">
-        <div className="flex space-x-2">
-          <Input
-            type="text"
-            value={search}
-            onChange={handleSearchChange}
-            placeholder="Search posts..."
-            className="flex-grow"
-          />
-          {search && (
+        <div className="relative mb-8">
+          <div className="flex space-x-2">
+            <Input
+              type="text"
+              value={search}
+              onChange={handleSearchChange}
+              placeholder="Search posts..."
+              className="flex-grow"
+            />
+            {search && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleSearchClear}
+                className="absolute right-16 top-1/2 -translate-y-1/2 transform"
+              >
+                <X className="text-muted-foreground h-4 w-4" />
+              </Button>
+            )}
             <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleSearchClear}
-              className="absolute right-16 top-1/2 -translate-y-1/2 transform"
+              type="button"
+              onClick={() => setIsSearching(true)}
+              className="ml-4"
             >
-              <X className="text-muted-foreground h-4 w-4" />
+              Search
             </Button>
-          )}
-          <Button
-            type="button"
-            onClick={() => setIsSearching(true)}
-            className="ml-4"
-          >
-            Search
-          </Button>
+          </div>
         </div>
-      </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {posts.data.map((post) => (
-          <Card key={post.id} className="transition-shadow hover:shadow-lg">
-            <CardHeader>
-              <CardTitle>
-                <Link href={`/posts/${post.id}`} className="hover:text-primary">
-                  {post.title}
-                </Link>
-              </CardTitle>
-            </CardHeader>
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {posts.data.map((post) => (
+            <Card key={post.id} className="transition-shadow hover:shadow-lg">
+              <CardHeader>
+                <CardTitle>
+                  <Link
+                    href={`/posts/${post.id}`}
+                    className="hover:text-primary"
+                  >
+                    {post.title}
+                  </Link>
+                </CardTitle>
+              </CardHeader>
 
-            <CardContent>
-              <p className="text-muted-foreground line-clamp-3">
-                {post.content.substring(0, 150)}...
-              </p>
-            </CardContent>
+              <CardContent>
+                <p className="text-muted-foreground line-clamp-3">
+                  {post.content.substring(0, 150)}...
+                </p>
+              </CardContent>
 
-            <CardFooter className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <div className="flex items-center text-yellow-500">
-                  <Star className="mr-1 h-4 w-4" />
-                  <span>
-                    {post.average_rating
-                      ? post.average_rating.toFixed(1)
-                      : 'N/A'}
-                  </span>
+              <CardFooter className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <div className="flex items-center text-yellow-500">
+                    <Star className="mr-1 h-4 w-4" />
+                    <span>
+                      {post.average_rating
+                        ? post.average_rating.toFixed(1)
+                        : 'N/A'}
+                    </span>
+                  </div>
+                  <div className="text-muted-foreground text-sm">
+                    Comments: {post.comments_count || 0}
+                  </div>
                 </div>
-                <div className="text-muted-foreground text-sm">
-                  Comments: {post.comments_count || 0}
-                </div>
-              </div>
-            </CardFooter>
-          </Card>
-        ))}
-      </div>
-
-      {posts.data.length === 0 && (
-        <div className="text-muted-foreground py-8 text-center">
-          No posts found.
+              </CardFooter>
+            </Card>
+          ))}
         </div>
-      )}
 
-      {/* Pagination */}
-      {posts.last_page > 1 && (
-        <Pagination className="mt-auto pt-10">
-          <PaginationContent>
-            {posts.links.map((link, index) => (
-              <PaginationItem key={index}>
-                <ShadcnPaginationLink
-                  href={link.url || '#'}
-                  isActive={link.active}
-                  onClick={(e) => {
-                    if (link.url) {
-                      e.preventDefault();
-                      router.get(link.url, {}, { preserveState: true });
-                    }
-                  }}
-                >
-                  {link.label.replace('&laquo;', '←').replace('&raquo;', '→')}
-                </ShadcnPaginationLink>
-              </PaginationItem>
-            ))}
-          </PaginationContent>
-        </Pagination>
-      )}
-    </div>
+        {posts.data.length === 0 && (
+          <div className="text-muted-foreground py-8 text-center">
+            No posts found.
+          </div>
+        )}
+
+        {/* Pagination */}
+        {posts.last_page > 1 && (
+          <Pagination className="mt-auto pt-10">
+            <PaginationContent>
+              {posts.links.map((link, index) => (
+                <PaginationItem key={index}>
+                  <ShadcnPaginationLink
+                    href={link.url || '#'}
+                    isActive={link.active}
+                    onClick={(e) => {
+                      if (link.url) {
+                        e.preventDefault();
+                        router.get(link.url, {}, { preserveState: true });
+                      }
+                    }}
+                  >
+                    {link.label.replace('&laquo;', '←').replace('&raquo;', '→')}
+                  </ShadcnPaginationLink>
+                </PaginationItem>
+              ))}
+            </PaginationContent>
+          </Pagination>
+        )}
+      </div>
+    </AuthenticatedLayout>
   );
 }

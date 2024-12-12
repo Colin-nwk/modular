@@ -2,7 +2,6 @@
 
 namespace Modules\Post\Http\Controllers;
 
-// namespace Modules\Foobar\Http\Controllers;
 
 
 
@@ -36,22 +35,19 @@ class PostController
 
     public function create()
     {
-        return Inertia::render('Post::Create', [
-            // Optional: Pass any necessary data for the create form
-            // For example, categories, tags, etc.
-        ]);
+        return Inertia::render('Post::Create', []);
     }
 
     public function store(Request $request)
     {
         // Uncomment if you want to use authorization
         // $this->authorize('create', Post::class);
-
+        // dd($request);
         $validated = $request->validate([
             'title' => 'required|max:255',
             'content' => 'required',
             'media' => 'sometimes|array',
-            'media.*' => 'sometimes|file|max:5120', // Optional media upload
+            // 'media.*' => 'sometimes|file|max:5120', // Optional media upload
         ]);
 
         $post = $request->user()->posts()->create([
@@ -93,7 +89,7 @@ class PostController
             'post' => $post,
             'averageRating' => $averageRating,
             // Optional: Check if current user has rated
-            // 'userRating' => $post->ratings()->where('user_id', auth()->id())->first(),
+            'userRating' => $post->ratings()->where('user_id', auth()->id())->first(),
         ]);
     }
 
@@ -114,10 +110,23 @@ class PostController
             'rating' => 'required|integer|between:1,5'
         ]);
 
+        $user = $request->user();
+        if (!$user) {
+            abort(403, 'User must be authenticated to rate a post.');
+        }
+
+        // // $request->user()
         $post->ratings()->updateOrCreate(
-            ['user_id' => $request->user()->id],
+            ['user_id' => $user->id],
             ['rating' => $validated['rating']]
         );
+
+        // $added = $post->ratings()->updateOrCreate(
+        //     ['user_id' => $user->id, 'post_id' => $post->id], // Add 'post_id' to match the unique constraint
+        //     ['rating' => $validated['rating']]
+        // );
+
+        // dd($added);
 
         return back()->with('success', 'Rating submitted successfully');
     }
@@ -163,33 +172,4 @@ class PostController
         return redirect()->route('post.post.show', $post)
             ->with('success', 'Post updated successfully');
     }
-
-
-    // public function store(Request $request)
-    // {
-    //     // $this->authorize('create', Post::class);
-
-    //     $validated = $request->validate([
-    //         'title' => 'required|max:255',
-    //         'content' => 'required'
-    //     ]);
-
-    //     $post = $request->user()->posts()->create($validated);
-
-    //     return redirect()->route('posts.show', $post);
-    // }
-
-    // public function rate(Request $request, Post $post)
-    // {
-    //     $validated = $request->validate([
-    //         'rating' => 'required|integer|between:1,5'
-    //     ]);
-
-    //     $post->ratings()->updateOrCreate(
-    //         ['user_id' => $request->user()->id],
-    //         ['rating' => $validated['rating']]
-    //     );
-
-    //     return back();
-    // }
 }
