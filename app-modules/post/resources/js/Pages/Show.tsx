@@ -3,6 +3,15 @@ import { Head, router } from '@inertiajs/react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { Edit, MessageCircle, Star, Trash2 } from 'lucide-react';
 
 interface PostShowProps extends PageProps {
@@ -24,9 +33,9 @@ interface PostShowProps extends PageProps {
 
 export default function Show({ post, auth }: PostShowProps) {
   const handleDelete = () => {
-    if (confirm('Are you sure you want to delete this post?')) {
-      router.delete(route('post.post.destroy', post.id));
-    }
+    router.delete(route('post.post.destroy', post.id));
+    // if (confirm('Are you sure you want to delete this post?')) {
+    // }
   };
 
   return (
@@ -45,9 +54,32 @@ export default function Show({ post, auth }: PostShowProps) {
             >
               <Edit className="h-4 w-4" />
             </Button>
-            <Button variant="destructive" size="icon" onClick={handleDelete}>
-              <Trash2 className="h-4 w-4" />
-            </Button>
+
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="destructive" size="icon">
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Delete Post</DialogTitle>
+                  <DialogDescription>
+                    Are you sure you want to delete this post?
+                  </DialogDescription>
+                </DialogHeader>
+                <div className=""></div>
+                <DialogFooter>
+                  <Button
+                    variant="destructive"
+                    // size="icon"
+                    onClick={handleDelete}
+                  >
+                    Delete
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
           {/* )} */}
         </CardHeader>
