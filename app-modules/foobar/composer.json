@@ -1,0 +1,24 @@
+{
+	"name": "modules/foobar",
+	"description": "",
+	"type": "library",
+	"version": "1.0",
+	"license": "proprietary",
+	"require": {},
+	"autoload": {
+		"psr-4": {
+			"Modules\\Foobar\\": "src/",
+			"Modules\\Foobar\\Tests\\": "tests/",
+			"Modules\\Foobar\\Database\\Factories\\": "database/factories/",
+			"Modules\\Foobar\\Database\\Seeders\\": "database/seeders/"
+		}
+	},
+	"minimum-stability": "stable",
+	"extra": {
+		"laravel": {
+			"providers": [
+				"Modules\\Foobar\\Providers\\FoobarServiceProvider"
+			]
+		}
+	}
+}
