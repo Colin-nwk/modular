@@ -29,9 +29,9 @@ export default function Edit({ post }: PostEditProps) {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    if (files) {
-      setData('media', Array.from(files));
-    }
+    // if (files) {
+    //   setData('media', Array.from(files));
+    // }
   };
 
   return (

@@ -24,7 +24,8 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        // $this->call([PostCommentSeeder::class]);
+        $this->call([UsersRolesPermissionsSeeder::class]);
+        $this->call([PostCommentSeeder::class]);
 
         // UsersRolesPermissionsSeeder::$called
 
@@ -36,16 +37,16 @@ class DatabaseSeeder extends Seeder
         $user = User::find(1);
         $post = Post::factory()->forUser($user)->create();
 
-        // Create a comment using random existing user and post
+
         Comment::factory(5)->create();
 
-        // Create a comment for a specific user and post
+
         $user = User::find(1);
         $post = Post::find(1);
         Comment::factory()->forUserAndPost($user, $post)->create();
 
         // Similar methods work for PostRating
-        PostRating::factory(1)->create();
-        PostRating::factory(1)->forUserAndPost($user, $post)->create();
+        // PostRating::factory(1)->create();
+        // PostRating::factory(1)->forUserAndPost($user, $post)->create();
     }
 }
