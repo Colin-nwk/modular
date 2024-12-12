@@ -34,10 +34,10 @@ class PostCommentSeeder extends Seeder
                 'created_at' => fake()->dateTimeBetween('-1 year', 'now')
             ]);
 
-            $posts->push($post);
+            // $posts->push($post);
 
-            // Add ratings for the post
-            $this->addRandomRatings($post, $users);
+            // // Add ratings for the post
+            // $this->addRandomRatings($post, $users);
         }
 
         // Generate comments
