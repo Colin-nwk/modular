@@ -2,7 +2,7 @@
 
 namespace Modules\Comment\Tests;
 
-class CommentServiceProviderTest extends TestCase
-{
-	// TODO
-}
+// class CommentServiceProviderTest extends TestCase
+// {
+// 	// TODO
+// }

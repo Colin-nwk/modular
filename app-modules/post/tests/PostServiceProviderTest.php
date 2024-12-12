@@ -2,7 +2,9 @@
 
 namespace Modules\Post\Tests;
 
-class PostServiceProviderTest extends TestCase
-{
-	// TODO
-}
+// use Tests\TestCase;
+
+// class PostServiceProviderTest extends TestCase
+// {
+// 	// TODO
+// }
